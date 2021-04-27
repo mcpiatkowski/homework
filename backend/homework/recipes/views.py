@@ -1,17 +1,25 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from .models import Recipe, Ingredient
+from .serializers import RecipeSerializer, IngredientSerializer
 
 
 @api_view(['GET'])
 def getRecipes(request):
-    return Response({"message": "Recipe List"})
+    recipes = Recipe.objects.all()
+    serializer = RecipeSerializer(recipes, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
 def getRecipeDetail(request, pk):
-    return Response({"message": "Recipe Detail"})
+    recipe = Recipe.objects.get(id=pk)
+    serializer = RecipeSerializer(recipe, many=False)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
 def getIngredients(request):
-    return Response({"message": "Ingredients!"})
+    ingredients = Ingredient.objects.all()
+    serializer = IngredientSerializer(ingredients, many=True)
+    return Response(serializer.data)
