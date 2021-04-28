@@ -1,10 +1,12 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from .models import Recipe, Ingredient
 from .serializers import RecipeSerializer, IngredientSerializer
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getRecipes(request):
     recipes = Recipe.objects.all()
     serializer = RecipeSerializer(recipes, many=True)
