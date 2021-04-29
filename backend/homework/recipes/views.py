@@ -4,6 +4,23 @@ from rest_framework.response import Response
 from .models import Recipe, Ingredient
 from .serializers import RecipeSerializer, IngredientSerializer
 
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+from rest_framework_simplejwt.views import TokenRefreshView
+from datetime import timedelta
+
+
+class MyTokenRefreshSerializer(TokenRefreshSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        data['exp'] = timedelta(minutes=1)
+
+        return data
+
+
+class MyTokenRefreshView(TokenRefreshView):
+    serializer_class = MyTokenRefreshSerializer
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -14,6 +31,7 @@ def getRecipes(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getRecipeDetail(request, pk):
     recipe = Recipe.objects.get(id=pk)
     serializer = RecipeSerializer(recipe, many=False)
@@ -21,6 +39,7 @@ def getRecipeDetail(request, pk):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getIngredients(request):
     ingredients = Ingredient.objects.all()
     serializer = IngredientSerializer(ingredients, many=True)
