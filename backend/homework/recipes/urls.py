@@ -13,7 +13,4 @@ urlpatterns = [
     path('recipes/', views.getRecipes, name='recipes'),
     path('recipe/<str:pk>/', views.getRecipeDetail, name='recipe-detail'),
     path('ingredients/', views.getIngredients, name='ingredients'),
-
-    path('recipe/<str:pk>/ingredients/',
-         views.getRecipeIngredients, name='recipe-ingredients'),
 ]

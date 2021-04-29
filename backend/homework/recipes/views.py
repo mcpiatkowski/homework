@@ -44,15 +44,3 @@ def getIngredients(request):
     ingredients = Ingredient.objects.all()
     serializer = IngredientSerializer(ingredients, many=True)
     return Response(serializer.data)
-
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def getRecipeIngredients(request, pk):
-    recipe = Recipe.objects.get(id=pk)
-    recipe_ingredients = recipe.ingredients.all()
-    print(recipe_ingredients)
-    serializer = MyRecipeSerializer(recipe, many=False)
-    return Response(serializer.data)
-
-# context={'request': request}
