@@ -6,14 +6,14 @@ from .serializers import RecipeSerializer, IngredientSerializer, MyRecipeSeriali
 
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.views import TokenRefreshView
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 
 class MyTokenRefreshSerializer(TokenRefreshSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
 
-        data['exp'] = timedelta(minutes=1)
+        data['exp'] = str(datetime.now() + timedelta(minutes=1)).split('.')[0]
 
         return data
 
