@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from .models import Recipe, Ingredient
-from .serializers import RecipeSerializer, IngredientSerializer
+from .serializers import RecipeSerializer, IngredientSerializer, MyRecipeSerializer
 
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.views import TokenRefreshView
@@ -34,7 +34,7 @@ def getRecipes(request):
 @permission_classes([IsAuthenticated])
 def getRecipeDetail(request, pk):
     recipe = Recipe.objects.get(id=pk)
-    serializer = RecipeSerializer(recipe, many=False)
+    serializer = MyRecipeSerializer(recipe, many=False)
     return Response(serializer.data)
 
 
@@ -44,3 +44,15 @@ def getIngredients(request):
     ingredients = Ingredient.objects.all()
     serializer = IngredientSerializer(ingredients, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getRecipeIngredients(request, pk):
+    recipe = Recipe.objects.get(id=pk)
+    recipe_ingredients = recipe.ingredients.all()
+    print(recipe_ingredients)
+    serializer = MyRecipeSerializer(recipe, many=False)
+    return Response(serializer.data)
+
+# context={'request': request}
